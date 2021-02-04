@@ -202,7 +202,10 @@ export default function RegisterPage(props) {
                 </Button>
               </Box>
               <Box textAlign="right">
-                <Link href="#" variant="body2">
+                <Link
+                  onClick={() => props.history.push("/login")}
+                  variant="body2"
+                >
                   {content["01_secondary-action"]}
                 </Link>
               </Box>

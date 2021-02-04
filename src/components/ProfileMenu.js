@@ -6,6 +6,7 @@ import Menu from "@material-ui/core/Menu";
 import { Avatar } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { userLogout } from "../actions/user.actions";
+import history from "../helpers/history";
 
 export default function ProfileMenu({ user }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -20,6 +21,10 @@ export default function ProfileMenu({ user }) {
     if (e.target.innerText === "Sign out") {
       setAnchorEl(null);
       dispatch(userLogout());
+    }
+    if (e.target.innerText === "Profile") {
+      setAnchorEl(null);
+      history.push("/profile");
     }
     setAnchorEl(null);
   };
