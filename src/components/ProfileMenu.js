@@ -3,16 +3,24 @@ import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import { Avatar } from "@material-ui/core";
+import { useDispatch } from "react-redux";
+import { userLogout } from "../actions/user.actions";
 
-export default function ProfileMenu() {
+export default function ProfileMenu({ user }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const dispatch = useDispatch();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (e) => {
+    if (e.target.innerText === "Sign out") {
+      setAnchorEl(null);
+      dispatch(userLogout());
+    }
     setAnchorEl(null);
   };
 
@@ -25,7 +33,11 @@ export default function ProfileMenu() {
         onClick={handleMenu}
         color="inherit"
       >
-        <AccountCircle style={{ fontSize: 35 }} />
+        {user?.avatar?.url ? (
+          <Avatar src={user.avatar.url} alt={user.name}></Avatar>
+        ) : (
+          <AccountCircle style={{ fontSize: 35 }} />
+        )}
       </IconButton>
       <Menu
         id="simple-menu"
@@ -44,7 +56,9 @@ export default function ProfileMenu() {
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>Setting</MenuItem>
-        <MenuItem onClick={handleClose}>Sign out</MenuItem>
+        <MenuItem onClick={handleClose} name="userLogout">
+          Sign out
+        </MenuItem>
       </Menu>
     </Fragment>
   );

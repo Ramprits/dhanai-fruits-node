@@ -4,6 +4,7 @@ import { makeStyles, fade } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Link from "@material-ui/core/Link";
 import InputBase from "@material-ui/core/InputBase";
 
@@ -19,8 +20,10 @@ import AppsIcon from "@material-ui/icons/Apps";
 import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
 import LiveHelpIcon from "@material-ui/icons/LiveHelp";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
-import ProfileMenu from "../ProfileMenu";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
+import ProfileMenu from "../ProfileMenu";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex"
@@ -99,14 +102,22 @@ const useStyles = makeStyles((theme) => ({
   },
   profileMenu: {
     marginRight: "20px",
+    display: "flex",
     [theme.breakpoints.down("md")]: {
       display: "none"
     }
+  },
+  loginIcon: {
+    marginLeft: "10px",
+    fontSize: "30px",
+    cursor: "pointer"
   }
 }));
 
 export default function Navigation(props) {
+  const history = useHistory();
   const classes = useStyles();
+  const { userInfo, isAuthenticated } = useSelector((state) => state.user);
 
   const content = {
     brand: { image: "mui-assets/img/logo-pied-piper-white.png", width: 120 },
@@ -199,7 +210,14 @@ export default function Navigation(props) {
             />
           </div>
           <div className={classes.profileMenu}>
-            <ProfileMenu />
+            {isAuthenticated ? (
+              <ProfileMenu user={userInfo?.user} />
+            ) : (
+              <ExitToAppIcon
+                className={classes.loginIcon}
+                onClick={() => history.push("/login")}
+              />
+            )}
           </div>
         </Toolbar>
       </AppBar>

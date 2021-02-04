@@ -1,5 +1,9 @@
 import axios from "axios";
-import { userLoginTypes, userRegisterTypes } from "../constants/user.constant";
+import {
+  userLoginTypes,
+  userLogoutTypes,
+  userRegisterTypes
+} from "../constants/user.constant";
 import history from "../helpers/history";
 
 /************* User Login *************/
@@ -23,7 +27,12 @@ export const userLogin = (payload) => async (dispatch) => {
     dispatch(userLoginSuccess(data));
     history.push("/");
   } catch (error) {
-    dispatch(userLoginFailure(error.response && error.response.data.error));
+    // TODO will solve this duplication here
+    if (error.response.status === 401) {
+      dispatch(userLoginFailure("Please enter correct email and password"));
+    } else {
+      dispatch(userLoginFailure(error.message));
+    }
   }
 };
 
@@ -49,5 +58,29 @@ export const userRegister = (payload) => async (dispatch) => {
     history.push("/login");
   } catch (error) {
     dispatch(userRegisterFailure(error.response && error.response.data.error));
+  }
+};
+
+/************* User Log out *************/
+
+export const userLogoutStart = () => ({
+  type: userLogoutTypes.USER_LOGOUT_START
+});
+export const userLogoutSuccess = () => ({
+  type: userLogoutTypes.USER_LOGOUT_SUCCESS
+});
+export const userLogoutFailure = (payload) => ({
+  type: userLogoutTypes.USER_LOGOUT_FAILURE,
+  payload
+});
+
+export const userLogout = () => async (dispatch) => {
+  try {
+    dispatch(userLogoutStart());
+    await axios.post("/users/logout");
+    dispatch(userLogoutSuccess());
+    history.push("/login");
+  } catch (error) {
+    dispatch(userLogoutFailure(error));
   }
 };

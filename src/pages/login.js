@@ -7,6 +7,10 @@ import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import MetaData from "../components/MetaData";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { userLogin } from "../actions/user.actions";
 
 const useStyles = makeStyles((theme) => ({
   tertiaryAction: {
@@ -22,8 +26,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function LoginPage(props) {
+  const dispatch = useDispatch();
   const classes = useStyles();
-
+  const { register, handleSubmit, errors } = useForm({
+    reValidateMode: "onSubmit",
+    defaultValues: {}
+  });
   const content = {
     brand: {
       image: "mui-assets/img/logo-pied-piper-icon.png",
@@ -45,9 +53,13 @@ export default function LoginPage(props) {
   } else {
     brand = content.brand.text || "";
   }
+  const onSubmit = (data) => {
+    dispatch(userLogin(data));
+  };
 
   return (
     <section>
+      <MetaData title="Login" />
       <Container maxWidth="xs">
         <Box pt={8} pb={10}>
           <Box mb={3} textAlign="center">
@@ -59,17 +71,20 @@ export default function LoginPage(props) {
             </Typography>
           </Box>
           <Box>
-            <form noValidate>
+            <form noValidate onSubmit={handleSubmit(onSubmit)}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
                     variant="outlined"
                     size="small"
-                    required
                     fullWidth
                     name="email"
-                    id="email"
+                    inputRef={register({ required: true })}
                     autoFocus
+                    error={!!errors.email}
+                    helperText={`${
+                      !!errors.email ? "Please enter email address" : ""
+                    }`}
                     label="Email address"
                     autoComplete="email"
                   />
@@ -78,13 +93,16 @@ export default function LoginPage(props) {
                   <TextField
                     size="small"
                     variant="outlined"
-                    required
                     fullWidth
                     name="password"
                     id="password"
                     label="Password"
                     type="password"
-                    autoComplete="current-password"
+                    inputRef={register({ required: true })}
+                    error={!!errors.password}
+                    helperText={`${
+                      !!errors.password ? "Please enter password" : ""
+                    }`}
                   />
                 </Grid>
               </Grid>
