@@ -11,14 +11,14 @@ import TextField from "@material-ui/core/TextField";
 const useStyles = makeStyles((theme) => ({
   tertiaryAction: {
     [theme.breakpoints.up("sm")]: {
-      textAlign: "right",
-    },
+      textAlign: "right"
+    }
   },
   actions: {
     [theme.breakpoints.down("sm")]: {
-      marginTop: theme.spacing(3),
-    },
-  },
+      marginTop: theme.spacing(3)
+    }
+  }
 }));
 
 export default function LoginPage(props) {
@@ -27,13 +27,13 @@ export default function LoginPage(props) {
   const content = {
     brand: {
       image: "mui-assets/img/logo-pied-piper-icon.png",
-      width: 40,
+      width: 80
     },
-    "02_header": "Sign in",
+    "02_header": "Welcome back!",
     "02_primary-action": "Sign in",
     "02_secondary-action": "Don't have an account?",
     "02_tertiary-action": "Forgot password?",
-    ...props.content,
+    ...props.content
   };
 
   let brand;
@@ -64,16 +64,19 @@ export default function LoginPage(props) {
                 <Grid item xs={12}>
                   <TextField
                     variant="outlined"
+                    size="small"
                     required
                     fullWidth
                     name="email"
                     id="email"
+                    autoFocus
                     label="Email address"
                     autoComplete="email"
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    size="small"
                     variant="outlined"
                     required
                     fullWidth
